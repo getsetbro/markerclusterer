@@ -1,49 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Markerclusterer : ">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Markerclusterer</title>
+    <meta charset="utf-8">
+    <title>MarkerClusterer</title>
+<style>
+  #mymap{
+    width: 800px;
+    height: 500px;
+  }
+</style>
   </head>
-
   <body>
+    <h1>MarkerClusterer</h1>
+    <div id="mymap"></div>
+    <script src="//maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="markerclusterer_compiled.js"></script>
+<script>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/getsetbro/markerclusterer">View on GitHub</a>
+var infos = [];
 
-          <h1 id="project_title">Markerclusterer</h1>
-          <h2 id="project_tagline"></h2>
+var locations = [
+  ['Chatham', 'http://vbarbershop.com/locations/chatham/', 40.745480, -74.431763, 4],
+  ['Houston Energy Corridor', 'http://vbarbershop.com/locations/houston-energy-corridor/', 29.757016, -95.627882, 4],
+  ['The Fairway Jenkintown', 'http://vbarbershop.com/locations/fairway-jenkintown/', 40.106155, -75.122788, 4],
+  ['Tucson Joesler Village', 'http://vbarbershop.com/locations/tucson-joesler-village/', 32.288031, -110.945301, 4],
+  ['Bellingham Bakerview Square', 'http://vbarbershop.com/locations/bellingham-bakerview-square/', 48.790003, -122.494667, 4],
+  ['River Oaks Houston', 'http://vbarbershop.com/locations/river-oaks-houston/', 29.753660, -95.410269, 4],
+  ['Winston-Salem', 'http://vbarbershop.com/locations/winston-salem/', 36.090435, -80.286798, 4],
+  ['Cary', 'http://vbarbershop.com/locations/cary/', 35.739575, -78.778319, 4],
+  ['Jersey City', 'http://vbarbershop.com/locations/jersey-city/', 40.721704, -74.036919, 4],
+  ['Hoboken', 'http://vbarbershop.com/locations/hoboken/', 40.750605, -74.027217, 4],
+  ['Joplin', 'http://vbarbershop.com/locations/joplin/', 37.057932, -94.514431, 4],
+  ['Fishers', 'http://vbarbershop.com/locations/fishers/', 39.959060, -85.918601, 4],
+  ['Bloomington', 'http://vbarbershop.com/locations/bloomington/', 39.157919, -86.497755, 4],
+  ['Sandy Springs', 'http://vbarbershop.com/locations/sandy-springs/', 33.917883, -84.377672, 4],
+  ['San Clemente Talega Village', 'http://vbarbershop.com/locations/san-clemente-talega-village/', 33.462809, -117.597486, 4],
+  ['Foothill Ranch', 'http://vbarbershop.com/locations/foothill-ranch/', 33.674691, -117.663339, 4],
+  ['Scottsdale Shea', 'http://vbarbershop.com/locations/scottsdale-shea/', 33.581511, -111.879218, 4],
+  ['Norterra Phoenix', 'http://vbarbershop.com/locations/norterra-phoenix/', 33.714511, -112.110611, 4],
+  ['Kierland Scottsdale', 'http://vbarbershop.com/locations/kierland-scottsdale/', 33.623643, -111.930109, 4],
+  ['Desert Ridge Phoenix', 'http://vbarbershop.com/locations/desert-ridge-phoenix/', 33.677854, -111.978579, 4],
+  ['Del Mar', 'http://vbarbershop.com/locations/del-mar/', 32.980527, -117.249728, 4],
+  ['CityScape Phoenix', 'http://vbarbershop.com/locations/cityscape-phoenix/', 33.448000, -112.073032, 4],
+  ['Chandler Pavilions', 'http://vbarbershop.com/locations/chandler-pavilions/', 33.319078, -111.970388, 4],
+  ['Chandler Fulton Ranch', 'http://vbarbershop.com/locations/chandler-fulton-ranch/', 33.233789, -111.856646, 4],
+  ['Arrowhead Peoria', 'http://vbarbershop.com/locations/arrowhead-peoria/', 33.637628, -112.219060, 4],
+  ['Arcadia Phoenix', 'http://vbarbershop.com/locations/arcadia-phoenix/', 33.494130, -111.977756, 4],
+];
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/getsetbro/markerclusterer/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/getsetbro/markerclusterer/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+var map = new google.maps.Map(document.getElementById('mymap'), {
+  zoom: 4,
+  center: new google.maps.LatLng(39.183608, -96.571669),
+  scrollwheel: false,
+  scaleControl: true,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+});
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>MarkerClusterer</p>
-      </section>
-    </div>
+var gmarkers = [];
+for (i = 0; i < locations.length; i++) {
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+    draggable: false,
+    map: map
+  });
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Markerclusterer maintained by <a href="https://github.com/getsetbro">getsetbro</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+  var content = '<a href="' + locations[i][1] + '" class="maplink">' + locations[i][0] + '</a>'
 
-    
+  var infowindow = new google.maps.InfoWindow();
+
+  google.maps.event.addListener(marker, 'click', (function(marker, content, infowindow) {
+    return function() {
+      /* close the previous info-window */
+      closeInfos();
+      infowindow.setContent(content);
+      infowindow.open(map, marker);
+      /* keep the handle, in order to close it on next click event */
+      infos[0] = infowindow;
+    };
+  })(marker, content, infowindow));
+  gmarkers.push(marker);
+}
+
+function closeInfos() {
+  if (infos.length > 0) {
+    /* detach the info-window from the marker ... undocumented in the API docs */
+    infos[0].set('marker', null);
+    /* and close it */
+    infos[0].close();
+    /* blank the array */
+    infos.length = 0;
+  }
+}
+
+var markerCluster = new MarkerClusterer(map, gmarkers);
+</script>
 
   </body>
 </html>
