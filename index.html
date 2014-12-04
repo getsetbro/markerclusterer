@@ -8,13 +8,22 @@
     width: 800px;
     height: 500px;
   }
+  .infoBox{
+    padding-top: 8px;
+  }
+  .ibDiv{
+    background-color: white;
+    padding:11px;
+  }
 </style>
   </head>
   <body>
     <h1>MarkerClusterer</h1>
     <div id="mymap"></div>
-    <script src="//maps.googleapis.com/maps/api/js"></script>
-    <script type="text/javascript" src="markerclusterer_compiled.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <!-- <script src="markerclusterer_compiled.js"></script> -->
+    <script src="bower_components/gmaps-markerclusterer-plus/src/markerclusterer.js"></script>
+    <script src="bower_components/google-infobox/google-infobox.js"></script>
 <script>
 
 var infos = [];
@@ -55,19 +64,44 @@ var map = new google.maps.Map(document.getElementById('mymap'), {
   scaleControl: true,
   mapTypeId: google.maps.MapTypeId.ROADMAP
 });
-
+  var icon1 = {
+    url:"svg/inprecisepin.png",
+    anchor:new google.maps.Point(16,42),
+    size: new google.maps.Size(32, 42)
+  };
 var gmarkers = [];
 for (i = 0; i < locations.length; i++) {
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(locations[i][2], locations[i][3]),
     draggable: false,
+    icon: icon1,
     map: map
   });
 
-  var content = '<a href="' + locations[i][1] + '" class="maplink">' + locations[i][0] + '</a>'
-
-  var infowindow = new google.maps.InfoWindow();
-
+  var content = '<div class="ibDiv"><a href="' + locations[i][1] + '" class="maplink">' + locations[i][0] + '</a>'+
+  'asdf asdf asdf dsf dsaf  dfs dfsa dfsa dfs dfsa dsaf dsfa f dfsa dsfa dfsa dfsa dfsa fdfd afs dfs dfsa dfas adfs dafs fd'+
+  '</div>';
+  var myOptions = {
+      content: content,
+      disableAutoPan: false,
+      maxWidth: 0,
+      pixelOffset: new google.maps.Size(-140, -99),
+      zIndex: null,
+      boxStyle: {
+        background: "url('tipbox.gif') no-repeat left top",
+        opacity: 1,
+        width: "280px",
+        height:"99px"
+      },
+    closeBoxMargin: "4px 4px 0 0",
+    closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+    infoBoxClearance: new google.maps.Size(1, 1),
+    isHidden: false,
+    pane: "floatPane",
+    enableEventPropagation: false
+  };
+  //var infowindow = new google.maps.InfoWindow();
+  var infowindow = new InfoBox(myOptions);
   google.maps.event.addListener(marker, 'click', (function(marker, content, infowindow) {
     return function() {
       /* close the previous info-window */
@@ -78,6 +112,7 @@ for (i = 0; i < locations.length; i++) {
       infos[0] = infowindow;
     };
   })(marker, content, infowindow));
+
   gmarkers.push(marker);
 }
 
@@ -91,8 +126,32 @@ function closeInfos() {
     infos.length = 0;
   }
 }
-
-var markerCluster = new MarkerClusterer(map, gmarkers);
+var clusterStyles = [
+  {
+    textColor: 'black',
+    url: 'svg/cluster01.png',
+    height: 36,
+    width: 36
+  },
+ {
+    textColor: 'pink',
+    url: 'svg/cluster02.png',
+    height: 36,
+    width: 36
+  },
+ {
+    textColor: 'yellow',
+    url: 'svg/cluster01.png',
+    height: 36,
+    width: 36
+  }
+];
+var mcOptions = {
+    gridSize: 50,
+    styles: clusterStyles,
+    maxZoom: 15
+};
+var markerclusterer = new MarkerClusterer(map, gmarkers, mcOptions);
 </script>
 
   </body>
